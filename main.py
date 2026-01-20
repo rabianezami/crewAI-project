@@ -6,8 +6,9 @@ from config.logger import logger
 from agents.researcher import create_researcher_agent
 from agents.writer import writer_agent
 from agents.editor import editor_agent
-from crewai import Crew  # <-- اینجا تغییر دادیم
-from config.settings import MAX_TOKENS, SERPER_MAX_RESULTS
+from crewai import Crew  
+from langchain_openai import ChatOpenAI
+from config.settings import MAX_TOKENS,  TEMPERATURE, SERPER_MAX_RESULTS
 
 
 OUTPUT_FILE_TXT = "output/results.txt"
@@ -17,13 +18,15 @@ def main():
     try: 
         logger.info("Starting CrewAI pipeline")
 
-        # Initialize Agents with their own prompts, rules, and token limits
-        researcher = create_researcher_agent(
-           max_results=SERPER_MAX_RESULTS,
-           token_limit=MAX_TOKENS
+        llm = ChatOpenAI(
+            temperature=TEMPERATURE,
+            max_tokens=MAX_TOKENS
         )
-        writer = writer_agent(token_limit=MAX_TOKENS)
-        editor = editor_agent(token_limit=MAX_TOKENS)
+
+        # Initialize Agents with their own prompts, rules, and token limits
+        researcher = create_researcher_agent()
+        writer = writer_agent()
+        editor = editor_agent()
 
         # Chain agents in order
         agent_pipeline = [researcher, writer, editor]
@@ -31,6 +34,7 @@ def main():
         # Execute the pipeline using Crew orchestration
         crew = Crew(
             agents=agent_pipeline,
+            llm=llm,
             verbose=True
         )
 

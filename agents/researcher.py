@@ -1,7 +1,7 @@
-from crewai import agent
+from crewai import Agent
 
 def create_researcher_agent():
-    return agent(
+    return Agent(
         role="Beginner-Focused AI Research Analyst",
 
         goal=(
