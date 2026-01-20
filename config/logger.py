@@ -17,7 +17,7 @@ console_handler = logging.StreamHandler()
 console_handler.setLevel(logging.INFO)
 
 formatter = logging.Formatter(
-    "%(asctime)s | %(levelnae)s | %(name)s | %(message)s"
+    "%(asctime)s | %(levelname)s | %(name)s | %(message)s"
 )
 file_handler.setFormatter(formatter)
 console_handler.setFormatter(formatter)

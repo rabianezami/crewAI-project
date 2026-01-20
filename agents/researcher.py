@@ -1,6 +1,6 @@
 from crewai import agent
 
-def create_researcher_agent(llm):
+def create_researcher_agent():
     return agent(
         role="Beginner-Focused AI Research Analyst",
 
@@ -31,6 +31,6 @@ def create_researcher_agent(llm):
             "- why this topic is useful for beginners"
         ),
 
-        llm=llm,
+       
         verbose=True,
     )
