@@ -1,7 +1,8 @@
 from crewai import Agent
 
-writer_agent = Agent(
-    role="Technical Content Writer",
+def create_writer_agent():
+    return Agent(
+         role="Technical Content Writer",
 
     goal=(
         "Write clear, concise, beginner-friendly content "
@@ -31,4 +32,4 @@ writer_agent = Agent(
 
     verbose=True,
     allow_delegation=False
-)
+    )
