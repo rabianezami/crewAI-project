@@ -1,7 +1,8 @@
 from crewai import Agent
 
-editor_agent =Agent(
-    role="Content Editor",
+def create_editor_agent():
+    return Agent(
+         role="Content Editor",
 
     goal=(
         "Refine written content to sound natural, human, and clear, "
@@ -30,4 +31,4 @@ editor_agent =Agent(
         "No bullet points.\n"
         "No explanations of changes."
     )
-)
+    )
