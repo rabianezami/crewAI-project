@@ -2,5 +2,10 @@ venv/
 __pycache__/
 *.pyc
 .env
-task1output.txt
-task2output.txt
+
+output/*.txt
+*.log
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
