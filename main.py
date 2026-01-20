@@ -4,8 +4,8 @@ load_dotenv()
 import json
 from config.logger import logger
 from agents.researcher import create_researcher_agent
-from agents.writer import writer_agent
-from agents.editor import editor_agent
+from agents.writer import create_writer_agent
+from agents.editor import create_editor_agent
 from crewai import Crew  
 from langchain_openai import ChatOpenAI
 from config.settings import MAX_TOKENS,  TEMPERATURE, SERPER_MAX_RESULTS
@@ -25,8 +25,8 @@ def main():
 
         # Initialize Agents with their own prompts, rules, and token limits
         researcher = create_researcher_agent()
-        writer = writer_agent()
-        editor = editor_agent()
+        writer = create_writer_agent()
+        editor = create_editor_agent()
 
         # Chain agents in order
         agent_pipeline = [researcher, writer, editor]
