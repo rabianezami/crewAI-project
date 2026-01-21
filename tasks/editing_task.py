@@ -1,18 +1,13 @@
-from crewai import Task 
-from agents.editor import editor_agent
+from crewai import Task
 
-editing_task = Task(
-    decription=(
-       "Review and refine the provided text to improve clarity, readability, "
-       "and natural human tone. Remove any robotic or AI-like phrasing while "
-       "preserving the original meaning and intent."
-    ),
-
-    agent=editor_agent,
-
-    expected_output=(
-        "A single clean, natural-sounding paragraph written in plain text. "
-        "The content must feel human-written, clear, and concise. "
-        "No headings, bullet points, explanations, or formatting."
+def create_editing_task(agent):
+    return Task(
+        description=(
+            "Edit the text to improve clarity and natural tone "
+            "without changing meaning."
+        ),
+        expected_output=(
+            "Single clean paragraph. Plain text only."
+        ),
+        agent=agent
     )
-)
