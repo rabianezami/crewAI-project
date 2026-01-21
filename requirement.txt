@@ -1,3 +1,4 @@
 crewai==0.22.5
 crewai-tools==0.0.15
-openai
+langchain-openai
+python-dotenv
