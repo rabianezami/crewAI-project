@@ -12,6 +12,7 @@ def create_editor_agent():
             "content sound human and readable."
         ),
         rules=[
+            "Do not delegate tasks to other agents under any circumstances."
             "Do not add new information",
             "Do not change meaning",
             "Remove robotic phrasing",

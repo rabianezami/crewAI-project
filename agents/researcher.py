@@ -13,6 +13,7 @@ def create_researcher_agent():
             "and simple language."
         ),
         rules=[
+            "Do not delegate tasks to other agents under any circumstances.",
             "Only include verified and practical information",
             "Avoid speculation or hype",
             "Explain concepts simply",
