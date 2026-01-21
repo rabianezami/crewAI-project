@@ -13,10 +13,11 @@ def create_editor_agent():
         ),
         rules=[
             "Do not delegate tasks to other agents under any circumstances."
-            "Do not add new information",
             "Do not change meaning",
-            "Remove robotic phrasing",
-            "Keep sentences short and direct"
+            "Remove robotic phrasing only",
+            "Keep a neutral and professional tone",
+            "Do not make the text conversational or casual",
+            "No greetings or closings"
         ],
         verbose=True
     )
