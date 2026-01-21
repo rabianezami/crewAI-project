@@ -2,20 +2,23 @@ from dotenv import load_dotenv
 load_dotenv()
 
 import json
+from crewai import Crew
+from langchain_openai import ChatOpenAI
+
 from config.logger import logger
+from config.settings import MAX_TOKENS, TEMPERATURE
+
 from agents.researcher import create_researcher_agent
 from agents.writer import create_writer_agent
 from agents.editor import create_editor_agent
-from crewai import Crew  
-from langchain_openai import ChatOpenAI
-from config.settings import MAX_TOKENS,  TEMPERATURE, SERPER_MAX_RESULTS
 
+from tasks.research_task import create_research_task
+from tasks.writing_task import create_writing_task
+from tasks.editing_task import create_editing_task
 
-OUTPUT_FILE_TXT = "output/results.txt"
-OUTPUT_FILE_JSON = "output/result.json"
 
 def main():
-    try: 
+    try:
         logger.info("Starting CrewAI pipeline")
 
         llm = ChatOpenAI(
@@ -23,41 +26,32 @@ def main():
             max_tokens=MAX_TOKENS
         )
 
-        # Initialize Agents with their own prompts, rules, and token limits
         researcher = create_researcher_agent()
         writer = create_writer_agent()
         editor = create_editor_agent()
 
-        # Chain agents in order
-        agent_pipeline = [researcher, writer, editor]
- 
-        # Execute the pipeline using Crew orchestration
+        tasks = [
+            create_research_task(researcher),
+            create_writing_task(writer),
+            create_editing_task(editor)
+        ]
+
         crew = Crew(
-            agents=agent_pipeline,
+            agents=[researcher, writer, editor],
+            tasks=tasks,
             llm=llm,
             verbose=True
         )
 
-        structured_output = crew.run(
-            return_structured=True  
-        )
-        logger.info("Pipeline executed successfully.")
+        result = crew.kickoff()
 
-        # Save JSON output
-        with open(OUTPUT_FILE_JSON, "w", encoding="utf-8") as f:
-            json.dump(structured_output, f, indent=2, ensure_ascii=False)
-        logger.info(f"JSON output saved: {OUTPUT_FILE_JSON}")
+        with open("output/result.txt", "w", encoding="utf-8") as f:
+            f.write(str(result))
 
-        # Save TXT output
-        final_text = "\n\n".join(
-            [f"=== {agent} ===\n{content}" for agent, content in structured_output.items()]
-        )
-        with open(OUTPUT_FILE_TXT, "w", encoding="utf-8") as f:
-            f.write(final_text)
-        logger.info(f"🔹 TXT output saved: {OUTPUT_FILE_TXT}")
+        logger.info("Pipeline completed successfully")
 
     except Exception as e:
-        logger.exception(f"❌ Pipeline failed: {e}")
+        logger.exception(f"Pipeline failed: {e}")
 
 if __name__ == "__main__":
     main()
