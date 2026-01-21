@@ -1,21 +1,17 @@
 from crewai.tools import BaseTool
-from typing import Type 
-from pydantic import BaseModal, Field
+from pydantic import BaseModel, Field
+from typing import Type
 from crewai_tools import SerperDevTool
 from config.settings import SERPER_MAX_RESULTS
 
-class SearchInput(BaseModal):
+class SearchInput(BaseModel):
     query: str = Field(..., description="Search query")
 
-class SearchTool(BaseModal):
+class SearchTool(BaseTool):
     name = "web_search"
-    description = "Search the web for up-to-date information"
-    args_schema: Type[BaseModal] = SearchInput
+    description = "Search the web for recent information"
+    args_schema: Type[BaseModel] = SearchInput
 
     def _run(self, query: str) -> str:
-        tool = SerperDevTool(
-            n_results=SERPER_MAX_RESULTS,
-            search_type="search"
-        )
-
+        tool = SerperDevTool(n_results=SERPER_MAX_RESULTS)
         return tool.run(query)
